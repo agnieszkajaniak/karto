@@ -11,7 +11,9 @@ mapka.addControl(new mapboxgl.ScaleControl({
 
 }));
 
-
+function dataToString(x) {
+	return x.from + ": " + x.number;
+}
 
 mapka.on('load', function() {
   mapka.addLayer({
@@ -34,10 +36,15 @@ mapka.on('load', function() {
 		
 		
 	 mapka.on('click', 'kartokraje', function (e) {
+		country = e.features[0].properties.NAME;
+		function f(x) {
+			return x.to == country;
+		}
+		var filtered = data.filter(f);
+		var strings = filtered.map(dataToString);
         new mapboxgl.Popup()
             .setLngLat(e.lngLat)
-            .setHTML(e.features[0].properties.NAME)
+            .setHTML(strings.join("<br>"))
             .addTo(mapka);
     });
-
 });
